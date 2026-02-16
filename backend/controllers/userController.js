@@ -2,15 +2,16 @@ const User = require('../models/userModel.js');
 
 exports.register = async (req, res) => {
   try {
-    const { name, email, password } = req.body;
+    const { name, email, password, phoneNumber } = req.body;
 
-    if (!name || !email || !password) {
+    if (!name || !email || !password || !phoneNumber) {
       return res.status(400).json({ message: "All fields are required" });
     }
 
     const user = new User({
       name,
       email,
+      phoneNumber,
       password
     });
 
@@ -35,6 +36,7 @@ exports.login = async (req, res) => {
       return res.status(404).json({ message: "User not found" });}
     if (user.password !== password) {
       return res.status(401).json({ message: "Invalid password" });}
+
     res.status(200).json({
       message: "Login successful",
       user

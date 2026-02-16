@@ -10,6 +10,14 @@ const userSchema = new mongoose.Schema({
     required: true,   
     unique: true,
   },
+  phoneNumber: {
+    type: Number,
+    required: true,
+    validate: {
+      validator: Number.isInteger,
+      message: '{VALUE} is not an integer'
+    }
+  },
   password: {
     type: String,
     required: true,   

@@ -1,28 +1,25 @@
-const mongoose = require('mongoose');
-
+const mongoose = require('mongoose')
 const bookingSchema = new mongoose.Schema({
+
   user: {
     type: mongoose.Schema.Types.ObjectId,
     ref: 'User',
     required: true
   },
-  service: {
+  service: { 
     type: String,
-    required: true
-  },
-  bookingDate: {
-    type: Date,
-    default: Date.now,
-    required: true
-  },
+     required: true },
+
+  schedule: { 
+    type: String, 
+    required: true },
+  bookingDate: { 
+    type: Date, 
+    default: Date.now },
   status: {
     type: String,
     enum: ['pending', 'confirmed', 'cancelled'],
     default: 'pending'
-  },
-  createdAt: {
-    type: Date,
-    default: Date.now
   }
 });
 

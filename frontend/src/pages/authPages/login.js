@@ -1,50 +1,69 @@
-import React from 'react';
-import useForm from '../../hooks/useHooks';
+import useForm from '../../hooks/useRegister';
+import {useNavigate} from 'react-router-dom';
+import { loginUser } from '../../services/registerApi';
 
-export default function Login(){
-const [formData, handleEvent] = useForm({email: "", password: ''})
 
-const submitForm = (e) => {
-  e.preventDefault()
-  console.log(formData)
-}
+export default function Login() {
+  const [values, handleChange, resetForm] = useForm({ email: "", password: '' });
+  const navigate = useNavigate()
+ const submitForm = async (e) => {
+  e.preventDefault();
+
+  try {
+    const result = await loginUser(values);
+    
+    if (result && result.user) {
+      localStorage.setItem('user', JSON.stringify(result.user));
+      
+      alert("Login Successful!");
+      navigate('/tracking');
+    }
+  } catch (error) {
+    console.error("Login Error:", error);
+    alert(error.message);
+  }
+};
+
   return (
-    <div className="min-h-screen flex items-center justify-center bg-gray-100">
-      <div className="w-full max-w-md bg-white p-8 rounded-2xl shadow-lg">
-        <h2 className="text-2xl font-bold text-center text-gray-800 mb-6">
-          Login
-        </h2>
+    <div className="min-h-screen flex items-center justify-center bg-gradient-to-br from-[#00d2ff] via-[#3a7bd5] to-[#00d2ff] p-4">
+      <div className="w-full max-w-md bg-white p-10 rounded-sm shadow-2xl relative">
+        <a href='/' className="absolute top-4 right-4 text-teal-400 text-xl font-light">✕</a>
+        <div className="flex items-center justify-center space-x-2 mb-10">
+          <span className="h-1 w-3 bg-blue-500"></span>
+          <h2 className="text-3xl font-bold text-center text-[#00bcd4] tracking-tight uppercase">
+            Login Form
+          </h2>
+          <span className="h-1 w-3 bg-blue-500"></span>
+        </div>
 
-        <form className="space-y-4" onSubmit={submitForm}>
-          <div>
-            <label className="block text-sm font-medium text-gray-600 mb-1 mt-2">
-              Email
-            </label>
+        <form className="space-y-6" onSubmit={submitForm}>
+          <div className="flex flex-col">
+            <label className="text-sm font-bold text-gray-600 mb-1">Email</label>
             <input
-            name="email"
+              name="email"
               type="email"
               placeholder="Enter your email"
-              className="w-full px-4 py-2 border border-black rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
-              value={formData.email}
-              onChange={handleEvent}
+              className="w-full border-b border-teal-400 py-2 focus:outline-none focus:border-blue-500 bg-transparent transition-colors"
+              value={values.email}
+              onChange={handleChange}
+              required
             />
           </div>
-          <div>
-            <label className="block text-sm font-medium text-gray-600 mb-1">
-              Password
-            </label>
+          <div className="flex flex-col">
+            <label className="text-sm font-bold text-gray-600 mb-1">Password</label>
             <input
-            name="password"
+              name="password"
               type="password"
               placeholder="Enter your password"
-              className="w-full px-4 py-2 border border-black rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
-              value={formData.password}
-              onChange={handleEvent}
+              className="w-full border-b border-teal-400 py-2 focus:outline-none focus:border-blue-500 bg-transparent transition-colors"
+              value={values.password}
+              onChange={handleChange}
+              required
             />
           </div>
           <button
             type="submit"
-            className="w-full bg-blue-600 text-white py-2 rounded-lg font-semibold hover:bg-blue-700 transition duration-300"
+            className="w-full bg-gradient-to-r from-[#0097a7] to-[#00e5ff] text-white py-3 rounded-md font-bold uppercase tracking-wider shadow-md hover:opacity-90 transition duration-300 mt-4"
           >
             Login
           </button>
@@ -52,4 +71,4 @@ const submitForm = (e) => {
       </div>
     </div>
   );
-};
+}

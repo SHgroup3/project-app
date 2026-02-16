@@ -15,6 +15,11 @@ exports.services = async (req, res) => {
             description : "best facial ever",
             price : 5000
             },
+            {
+                name: "haircut",
+                description : "best haircut",
+                price : 4000
+            },
          ])
     }
     catch {
