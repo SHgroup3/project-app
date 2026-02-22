@@ -5,6 +5,7 @@ import Register from './pages/authPages/register';
 import Login from './pages/authPages/login';
 import BookingPage from './pages/bookingPage';
 import TrackingPage from './pages/trackingPage';
+import AdminDashboard from './pages/authPages/admin';
 
 
 export default function App(){
@@ -15,6 +16,10 @@ export default function App(){
       <Route path='/login' element={<Login />}></Route>
       <Route path='/booking' element={<BookingPage />}></Route>
       <Route path='/tracking' element={<TrackingPage />}></Route>
+      <Route path="/admin/dashboard" element={
+      <AdminDashboard />
+  } 
+/>
     </Routes>
   )
 }

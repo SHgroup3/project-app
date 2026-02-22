@@ -17,7 +17,7 @@ const BookingPage = () => {
 
   const getNextSevenDays = () => {
     const days = [];
-    for (let i = 0; i < 7; i++) {
+    for (let i = 1; i < 8; i++) {
       const date = new Date();
       date.setDate(date.getDate() + i);
       days.push({

@@ -1,28 +1,34 @@
+import React from 'react';
 import useForm from '../../hooks/useRegister';
-import {useNavigate} from 'react-router-dom';
-import { loginUser } from '../../services/registerApi';
-
+import { useNavigate } from 'react-router-dom';
+import { login } from '../../services/registerApi';
 
 export default function Login() {
   const [values, handleChange, resetForm] = useForm({ email: "", password: '' });
-  const navigate = useNavigate()
- const submitForm = async (e) => {
-  e.preventDefault();
+  const navigate = useNavigate();
 
-  try {
-    const result = await loginUser(values);
-    
-    if (result && result.user) {
-      localStorage.setItem('user', JSON.stringify(result.user));
+  const submitForm = async (e) => {
+    e.preventDefault();
+
+    try {
+      const result = await login(values);
       
-      alert("Login Successful!");
-      navigate('/tracking');
+      if (result && result.user) {
+        localStorage.setItem('user', JSON.stringify(result.user));
+        
+        alert("Login Successful!");
+        if (result.user.role === 'admin') {
+          navigate('/admin/dashboard'); 
+        } else {
+          navigate('/tracking'); 
+        }
+      }
+    } catch (error) {
+      console.error("Login Error:", error);
+
+      alert(error.response?.data?.message || "Login Failed!");
     }
-  } catch (error) {
-    console.error("Login Error:", error);
-    alert(error.message);
-  }
-};
+  };
 
   return (
     <div className="min-h-screen flex items-center justify-center bg-gradient-to-br from-[#00d2ff] via-[#3a7bd5] to-[#00d2ff] p-4">
@@ -63,7 +69,7 @@ export default function Login() {
           </div>
           <button
             type="submit"
-            className="w-full bg-gradient-to-r from-[#0097a7] to-[#00e5ff] text-white py-3 rounded-md font-bold uppercase tracking-wider shadow-md hover:opacity-90 transition duration-300 mt-4"
+            className="w-full bg-gradient-to-r from-[#0097a7] to-[#00e5ff] text-white py-3 rounded-md font-bold uppercase tracking-wider shadow-md hover:opacity-90 transition duration-300 mt-4 active:scale-95"
           >
             Login
           </button>

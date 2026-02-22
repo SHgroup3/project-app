@@ -58,53 +58,60 @@ const TrackingPage = () => {
             <PlusCircle size={20} /> Book New
           </button>
         </div>
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-10">
-          {userBookings.map((booking) => {
-            const isCancelled = booking.status === 'cancelled';
-            const scheduleParts = booking.schedule.split(' at ');
-            
-            return (
-              <div key={booking._id} className="bg-white rounded-[35px] overflow-hidden shadow-2xl shadow-blue-100 border border-gray-50 transition-transform hover:scale-[1.02]">
-                <div className="bg-blue-600 p-5 flex justify-between items-center text-white">
-                  <h3 className="font-black text-lg capitalize">{booking.service}</h3>
-                  <span className={`text-[10px] font-bold px-3 py-1 rounded-full uppercase tracking-widest ${isCancelled ? 'bg-yellow-400 text-yellow-900' : 'bg-yellow-400 text-yellow-900'}`}>
-                    {booking.status || 'pending'}
-                  </span>
-                </div>
-                <div className="p-8 space-y-5">
-                  <div className="flex items-center gap-4 text-blue-900 font-semibold">
-                    <Calendar size={20} className="text-blue-500" />
-                    <span className="text-sm">{scheduleParts[0]}</span>
+        {userBookings.length === 0 ? (
+          <div className="text-center py-20 bg-white rounded-[35px] shadow-xl">
+            <h2 className="text-2xl font-bold text-blue-900">No Booking Found</h2>
+            <p className="text-gray-500">you didn't have any booking yet.</p>
+          </div>
+        ) : (
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-10">
+            {userBookings.map((booking) => {
+              const isCancelled = booking.status === 'cancelled';
+              const scheduleParts = booking.schedule.split(' at ');
+              
+              return (
+                <div key={booking._id} className="bg-white rounded-[35px] overflow-hidden shadow-2xl shadow-blue-100 border border-gray-50 transition-transform hover:scale-[1.02]">
+                  <div className="bg-blue-600 p-5 flex justify-between items-center text-white">
+                    <h3 className="font-black text-lg capitalize">{booking.service}</h3>
+                    <span className={`text-[10px] font-bold px-3 py-1 rounded-full uppercase tracking-widest ${isCancelled ? 'bg-yellow-400 text-yellow-900' : 'bg-yellow-400 text-yellow-900'}`}>
+                      {booking.status || 'pending'}
+                    </span>
                   </div>
-                  
-                  <div className="flex items-center gap-4 text-blue-900 font-semibold">
-                    <Clock size={20} className="text-blue-500" />
-                    <span className="text-sm">{scheduleParts[1] || "Flexible Time"}</span>
-                  </div>
+                  <div className="p-8 space-y-5">
+                    <div className="flex items-center gap-4 text-blue-900 font-semibold">
+                      <Calendar size={20} className="text-blue-500" />
+                      <span className="text-sm">{scheduleParts[0]}</span>
+                    </div>
+                    
+                    <div className="flex items-center gap-4 text-blue-900 font-semibold">
+                      <Clock size={20} className="text-blue-500" />
+                      <span className="text-sm">{scheduleParts[1] || "Flexible Time"}</span>
+                    </div>
 
-                  <div className="flex items-center gap-4 text-blue-900 font-semibold">
-                    <Scissors size={20} className="text-blue-500" />
-                    <span className="text-sm">Salon Appointment</span>
-                  </div>
-                  <div className="pt-6 border-t border-gray-100">
-                    {isCancelled ? (
-                      <p className="text-center text-red-500 font-black uppercase text-sm tracking-tighter">
-                        THIS BOOKING WAS CANCELLED
-                      </p>
-                    ) : (
-                      <button 
-                        onClick={() => handleCancel(booking._id)}
-                        className="w-full py-3 bg-white border-2 border-red-50 text-red-500 font-bold rounded-2xl hover:bg-red-50 transition-colors shadow-sm"
-                      >
-                        Cancel Booking
-                      </button>
-                    )}
+                    <div className="flex items-center gap-4 text-blue-900 font-semibold">
+                      <Scissors size={20} className="text-blue-500" />
+                      <span className="text-sm">Salon Appointment</span>
+                    </div>
+                    <div className="pt-6 border-t border-gray-100">
+                      {isCancelled ? (
+                        <p className="text-center text-red-500 font-black uppercase text-sm tracking-tighter">
+                          THIS BOOKING WAS CANCELLED
+                        </p>
+                      ) : (
+                        <button 
+                          onClick={() => handleCancel(booking._id)}
+                          className="w-full py-3 bg-white border-2 border-red-50 text-red-500 font-bold rounded-2xl hover:bg-red-50 transition-colors shadow-sm"
+                        >
+                          Cancel Booking
+                        </button>
+                      )}
+                    </div>
                   </div>
                 </div>
-              </div>
-            );
-          })}
-        </div>
+              );
+            })}
+          </div>
+        )}
       </div>
     </PageWrapper>
   );

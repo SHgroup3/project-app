@@ -15,12 +15,18 @@ const userSchema = new mongoose.Schema({
     required: true,
     validate: {
       validator: Number.isInteger,
-      message: '{VALUE} is not an integer'
+      match: [/^(03)[0-4][0-9]{8}$/, "Please enter a valid phone number"]
     }
   },
   password: {
     type: String,
     required: true,   
+    minlength: [8, "Password must be at least 8 characters long"]
+  },
+  role: {
+    type: String,
+    enum: ['user', 'admin'],
+    default: 'user'
   }
 });
 
