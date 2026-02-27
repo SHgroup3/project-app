@@ -15,12 +15,10 @@ export default function Login() {
       
       if (result && result.user) {
         localStorage.setItem('user', JSON.stringify(result.user));
-        
-        alert("Login Successful!");
         if (result.user.role === 'admin') {
           navigate('/admin/dashboard'); 
         } else {
-          navigate('/tracking'); 
+          navigate('/dashboard'); 
         }
       }
     } catch (error) {
@@ -74,6 +72,17 @@ export default function Login() {
             Login
           </button>
         </form>
+        <div className="mt-8 text-center">
+  <p className="text-gray-600 text-sm">
+    Don't have an account?{" "}
+    <button 
+      onClick={() => navigate('/signup')}
+      className="text-[#00bcd4] font-bold hover:underline transition-all"
+    >
+      Register here
+    </button>
+  </p>
+</div>
       </div>
     </div>
   );

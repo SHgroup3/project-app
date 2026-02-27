@@ -46,9 +46,18 @@ export const getAllBookings = async () => {
 export const updateBookingStatus = async (id, status) => {
   try {
 
-    const response = await axios.put(`${BASE_URL}/admin/update-status/${id}`, { status });
+    const response = await axios.put(`${BASE_URL}/admin/update-status/${id}`, { status })
     return response.data;
   } catch (error) {
     throw error.response?.data || error.message;
   }
+};
+
+export const checkAvailability = async (date) => {
+    try {
+        const response = await axios.get(`${BASE_URL}/availability?date=${date}`);
+        return response.data;
+    } catch (error) {
+        throw error.response?.data || error.message;
+    }
 };

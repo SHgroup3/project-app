@@ -16,10 +16,14 @@ exports.updateBookingStatus = async (req, res) => {
 
     const updatedBooking = await Booking.findByIdAndUpdate(
       id, 
-      { status }, 
-      { new: true }
+      { $set: { status: status } }, 
+      { new: true, runValidators: true } 
     );
-    res.status(200).json({ message: `Booking ${status}`, updatedBooking });
+
+    if (!updatedBooking) {
+        return res.status(404).json({ message: "Booking not found" });
+    }
+    res.status(200).json(updatedBooking);
   } catch (error) {
     res.status(500).json({ message: error.message });
   }

@@ -1,10 +1,12 @@
 import React, { useEffect, useState } from 'react';
 import { CheckCircle, XCircle, Users, Calendar, RefreshCcw } from 'lucide-react';
 import { getAllBookings, updateBookingStatus } from '../../services/registerApi'; 
+import {useNavigate} from 'react-router-dom'
 
 const AdminDashboard = () => {
   const [bookings, setBookings] = useState([]);
   const [loading, setLoading] = useState(true);
+  const navigate = useNavigate()
 
   const fetchAllBookings = async () => {
     try {
@@ -23,15 +25,26 @@ const AdminDashboard = () => {
   }, []);
 
   const handleStatusUpdate = async (id, newStatus) => {
-    try {
-      await updateBookingStatus(id, newStatus);
-      setBookings(prev => 
-        prev.map(b => b._id === id ? { ...b, status: newStatus } : b)
-      );
-    } catch (error) {
-      alert("Failed to update status");
-    }
-  };
+  try {
+    // 1. API call karein
+    const response = await updateBookingStatus(id, newStatus);
+    
+    // 2. Debugging ke liye check karein response kya aaya
+    console.log("Frontend received:", response);
+
+    // 3. State update karein (Refresh ke baghair UI change karne ke liye)
+    setBookings(prev => 
+      prev.map(b => b._id === id ? { ...b, status: newStatus } : b)
+    );
+    
+    // 4. Success message (Optionally)
+    // toast.success("Status Updated!"); 
+    
+  } catch (error) {
+    console.error("Frontend Update Error:", error);
+    alert("Failed to update status. Check console for details.");
+  }
+};
 
   if (loading) return <div className="text-center p-20 font-bold text-blue-600">Loading Admin Panel...</div>;
 
@@ -42,12 +55,18 @@ const AdminDashboard = () => {
           <div>
             <h1 className="text-3xl font-black text-blue-900 tracking-tight uppercase italic">Admin Dashboard</h1>
           </div>
+          <div className='flex flex-row space-x-2'>
+          <button 
+             onClick={() => navigate('/login')} 
+             className="flex items-center gap-2 bg-blue-900 text-white px-6 py-3 rounded-xl font-bold hover:bg-blue-600 transition-colors">Logout</button>
+
           <button 
             onClick={fetchAllBookings}
             className="p-3 bg-white rounded-full shadow-md hover:rotate-180 transition-all duration-500 text-blue-600"
           >
             <RefreshCcw size={24} />
           </button>
+                       </div>
         </div>
 
         <div className="grid grid-cols-1 md:grid-cols-3 gap-6 mb-10">
